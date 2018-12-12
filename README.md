@@ -9,7 +9,7 @@ To compile the program, run either ./make.sh or the following command
 :$ fsharpc -a animalsSmall.fs && fsharpc -r animalsSmall.dll main.fsx
 
 
-To use the program the following parameters should be provided to create a new environment. 
+To use the program the following parameters should be provided to create a new environment, where a text file, called "test.txt", is returned when the program terminates. 
 
 mono main.exe [T][n][e][felg][u][fulv][s][optional]
 
