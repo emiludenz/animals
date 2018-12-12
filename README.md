@@ -9,9 +9,9 @@ To compile the program, run either ./make.sh or the following command
 :$ fsharpc -a animalsSmall.fs && fsharpc -r animalsSmall.dll main.fsx
 
 
-To use the program the following parameters should be provided to create a new environment, where a text file, called "test.txt", is returned when the program terminates. 
+To use the program the following parameters should be provided to create a new environment, where a text file, called "test.txt", is returned when the program terminates.
 
-:$ mono main.exe [T][n][e][felg][u][fulv][s][optional]
+:$ mono main.exe [T] [n] [e] [felg] [u] [fulv] [s] [v[optional]]
 
 Tick [T]: How many ticks to run
 
@@ -30,7 +30,3 @@ wolvesHungLen [s]:The number of ticks since it last ate until a wolf dies.
 verbose [optional]: If the verbose flag is true, then messages are printed on screen at key events.
 
 Eg. :$ mono main.exe 50 20 5 5 5 5 5 false
-
-
-The last parameter is optional.
-

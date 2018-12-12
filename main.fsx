@@ -3,7 +3,8 @@ open System
 open System.IO
 
 /// <summary> The CLT AnimalExperiment conducts evils tests on animals,
-/// running a matrix lifelike simulation on unknowning and unsuspecting animals!!</summary>
+/// running a matrix lifelike simulation on unknowning and unsuspecting
+/// animals!!</summary>
 /// <param name="T"> T is an int, representing how many ticks to run</param>
 /// <param name="n"> n is the number represention the board witdh</param>
 /// <param name="e"> e represents the amount of moose to start off with</param>
@@ -39,8 +40,9 @@ let main args =
     // Anything else
     | _ -> printfn """
             <summary> The CLT AnimalExperiment conducts evils tests on animals,
-            running a matrix lifelike simulation on unknowning and unsuspecting animals!!</summary>
-            
+            running a matrix lifelike simulation on unknowning and unsuspecting
+            animals!!</summary>
+
             <param name="T"> T is an int, representing how many ticks to run</param>
             <param name="n"> n is the number represention the board witdh</param>
             <param name="e"> e represents the amount of moose to start off with</param>
@@ -49,12 +51,12 @@ let main args =
             <param name="fulv"> fulv is the time to breed a new wolf</param>
             <param name="s"> s represents hunger for the wolves before starvation</param>
             <param name="v"> v is a bool, verbose true or false. Default is false</param>
-            
+
             <remarks> Would have been smart if the first argument or
             something was a name/path of a text file to write to </remarks>
-            
+
             <code> mono main.exe 50 10 10 10 10 10 false </code>
-            
+
             <returns> A text file called test.txt with results</returns>"""
-    /// Exit code 
+    /// Exit code
     0
