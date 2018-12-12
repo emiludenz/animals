@@ -91,12 +91,13 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
       j <- rnd.Next b.width
     (i,j)
 
-  /// <summary>Corner check x to see if it is inside the bounds</summary>
+  /// <summary> The function corner checks x to see if it is
+  /// inside the bounds as defined by the size of the board</summary>
   /// <param name="x">An int to check</param>
   /// <remarks>works only with integers</remarks>
   /// <returns>Some(x) or None</returns>
   let corner x =
-    if (x<0) || (x>_board.width-1) then None
+    if (x < 0) || (x > _board.width-1) then None
     else Some(x)
 
   /// <summary>mooseNext checks if a moose is near the wolf</summary>
@@ -117,11 +118,11 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
     if (targets.Length > 0) then
       targets.[rnd.Next (0, targets.Length)] else None
 
-  /// <summary>move gets a new position to move to, or returns the starting position</summary>
-  /// <param name="b">The board with the moose list and wolf list</param>
-  /// <param name="pos">A start postion</param>
-  /// <remarks>works only with the type specified</remarks>
-  /// <returns>A position</returns>
+  /// <summary> The function move gets a new position to move to, or returns the starting position</summary>
+  /// <param name="b"> The board with the moose list and wolf list</param>
+  /// <param name="pos"> A start postion</param>
+  /// <remarks> Works only with the type specified</remarks>
+  /// <returns> A position</returns>
   let move (b: board) (pos:position) =
     let arr = draw b
     let mutable targets = []
@@ -145,7 +146,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   member this.size = boardWidth*boardWidth
   member this.count = _board.moose.Length + _board.wolves.Length
   member this.board = _board
-  /// <summary>this.tick() handles the two groups of animals.
+  /// <summary> The method tick() handles the two groups of animals.
   /// Each update, the animals either move, breed or feed (wolf only)</summary>
   /// <remarks>Works only with the animals wolf and moose</remarks>
   /// <returns>Nothing, it changes the object that has been initialised</returns>
@@ -182,7 +183,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
               _board.moose <- _board.moose |> List.filter (fun i -> not(i.position = target))
               w.position <- target
               w.resetHunger()
-            //Birth if it is allowed
+            // Birth if it is allowed
             elif (tick.IsSome  && animalCount < this.size && not(curPos = w.position)) then
               animalCount <- animalCount + 1
               let _w = tick.Value
@@ -190,7 +191,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
               _board.wolves <- List.append _board.wolves [_w]
             // Or just move around
             else w.position <- Some(move _board w.position.Value)
-
         else w.position <- None
     _board.wolves <- _board.wolves |> List.filter (fun i -> not(i.position = None))
 

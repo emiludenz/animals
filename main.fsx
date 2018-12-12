@@ -11,10 +11,10 @@ open System.IO
 /// <param name="u"> u represents the amount of wolves to start off with</param>
 /// <param name="fulv"> fulv is the time to breed a new wolf</param>
 /// <param name="s"> s represents hunger for the wolves before starvation</param>
-/// <param name="v"> v is a bool, verbose true or false</param>
-/// <remarks> Would have been smart if the fir argument or
+/// <param name="v"> v is a bool, verbose true or false. Default is false</param>
+/// <remarks> Would have been smart if the first argument or
 /// something was a name of a text file to write to </remarks>
-/// <returns> A text file called test.txt with resultats </returns>
+/// <returns> A text file called test.txt with results </returns>
 [<EntryPoint>]
 let main args =
     let mutable str = "Wolf,  Moose\n"
@@ -36,23 +36,25 @@ let main args =
             str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
             isle.tick ()
         File.WriteAllText("test.txt", str)
+    // Anything else
     | _ -> printfn """
-<summary> The CLT AnimalExperiment conducts evils tests on animals,
-running a matrix lifelike simulation on unknowning and unsuspecting animals!!</summary>
-
-<param name="T"> T is an int, representing how many ticks to run</param>
-<param name="n"> n is the number represention the board witdh</param>
-<param name="e"> e represents the amount of moose to start off with</param>
-<param name="fegl"> fegl is the time to breed a new moose</param>
-<param name="u"> u represents the amount of wolves to start off with</param>
-<param name="fulv"> fulv is the time to breed a new wolf</param>
-<param name="s"> s represents hunger for the wolves before starvation</param>
-<param name="v"> v is a bool, verbose true or false</param>
-
-<remarks> Would have been smart if the fir argument or
-something was a name of a text file to write to </remarks>
-
-<code> mono main.exe 50 10 10 10 10 10 false </code>
-
-<returns> A text file called test.txt with resultats </returns>"""
+            <summary> The CLT AnimalExperiment conducts evils tests on animals,
+            running a matrix lifelike simulation on unknowning and unsuspecting animals!!</summary>
+            
+            <param name="T"> T is an int, representing how many ticks to run</param>
+            <param name="n"> n is the number represention the board witdh</param>
+            <param name="e"> e represents the amount of moose to start off with</param>
+            <param name="fegl"> fegl is the time to breed a new moose</param>
+            <param name="u"> u represents the amount of wolves to start off with</param>
+            <param name="fulv"> fulv is the time to breed a new wolf</param>
+            <param name="s"> s represents hunger for the wolves before starvation</param>
+            <param name="v"> v is a bool, verbose true or false. Default is false</param>
+            
+            <remarks> Would have been smart if the first argument or
+            something was a name/path of a text file to write to </remarks>
+            
+            <code> mono main.exe 50 10 10 10 10 10 false </code>
+            
+            <returns> A text file called test.txt with results</returns>"""
+    /// Exit code 
     0
