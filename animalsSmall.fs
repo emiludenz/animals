@@ -27,7 +27,6 @@ type animal (symb : symbol, repLen : int) =
   override this.ToString () =
     string this.symbol
 
-
 /// A moose is an animal
 type moose (repLen : int) =
   inherit animal (mSymbol, repLen)
@@ -59,14 +58,11 @@ type wolf (repLen : int, hungLen : int) =
       Some(wolf(this.reproduction, hungLen))
     else None
 
-
-
 /// A board is a chess-like board implicitly representedy by its width and coordinates of the animals.
 type board =
   {width : int;
    mutable moose : moose list;
    mutable wolves : wolf list;}
-
 
 /// An environment is a chess-like board with all animals and implenting all rules.
 type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : int, wolvesRepLen : int, wolvesHungLen : int, verbose : bool) =
@@ -75,7 +71,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
     moose = List.init NMooses (fun i -> moose(mooseRepLen));
     wolves = List.init NWolves (fun i -> wolf(wolvesRepLen, wolvesHungLen));
   }
-
 
   /// Project the list representation of the board into a 2d array.
   let draw (b : board) : char [,] =
@@ -96,10 +91,19 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
       j <- rnd.Next b.width
     (i,j)
 
+  /// <summary>Corner check x to see if it is inside the bounds</summary>
+  /// <param name="x">An int to check</param>
+  /// <remarks>works only with integers</remarks>
+  /// <returns>Some(x) or None</returns>
   let corner x =
     if (x<0) || (x>9) then None
     else Some(x)
 
+  /// <summary>mooseNext checks if a moose is near the wolf</summary>
+  /// <param name="b">The board with the moose list and wolf list</param>
+  /// <param name="pos">A start postion</param>
+  /// <remarks>works only with the type specified</remarks>
+  /// <returns>A position</returns>
   let mooseNext (b: board) (pos:position) =
     let arr = draw b
     let mutable targets = []
@@ -113,6 +117,11 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
     if (targets.Length > 0) then
       targets.[rnd.Next (0, targets.Length)] else None
 
+  /// <summary>move gets a new position to move to, or returns the starting position</summary>
+  /// <param name="b">The board with the moose list and wolf list</param>
+  /// <param name="pos">A start postion</param>
+  /// <remarks>works only with the type specified</remarks>
+  /// <returns>A position</returns>
   let move (b: board) (pos:position) =
     let arr = draw b
     let mutable targets = []
@@ -136,6 +145,11 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   member this.size = boardWidth*boardWidth
   member this.count = _board.moose.Length + _board.wolves.Length
   member this.board = _board
+
+  /// <summary>this.tick() handles the two groups of animals.
+  /// Each update, the animals either move, breed or feed (wolf only)</summary>
+  /// <remarks>Works only with the animals wolf and moose</remarks>
+  /// <returns>Nothing, it changes the object that has been initialised</returns>
   member this.tick() =
     let mutable animalCount = 0
     /// Handling the moose population
@@ -144,7 +158,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
           animalCount <- animalCount + 1
           let tick = m.tick()
           let curPos = Some(move _board m.position.Value)
-        
           // Making them children
           if (tick.IsSome && animalCount < 100 && not(curPos = m.position)) then
             let _m = tick.Value
@@ -153,7 +166,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
             _board.moose <- List.append _board.moose [_m]
           // Or just move around
           else m.position <- Some(move _board m.position.Value)
-        
         else m.position <- None
     _board.moose <- _board.moose |> List.filter (fun i -> not(i.position = None))
 
@@ -162,19 +174,16 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
         if (animalCount < 100) then
           animalCount <- animalCount + 1
           let tick = w.tick()
-
           // Eating or breading, if not dead...
           if (w.position.IsSome) then
             let target = mooseNext _board w.position.Value
             let curPos = Some(move _board w.position.Value)
-            
             // Attack!
             if (target.IsSome) then
               _board.moose <- _board.moose |> List.filter (fun i -> not(i.position = target))
               w.position <- target
               w.resetHunger()
-            
-            //Birth if it is allowed 
+            //Birth if it is allowed
             elif (tick.IsSome  && animalCount < 100 && not(curPos = w.position)) then
               animalCount <- animalCount + 1
               let _w = tick.Value
@@ -182,10 +191,9 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
               _board.wolves <- List.append _board.wolves [_w]
             // Or just move around
             else w.position <- Some(move _board w.position.Value)
-        
+
         else w.position <- None
     _board.wolves <- _board.wolves |> List.filter (fun i -> not(i.position = None))
-
 
   override this.ToString () =
     let arr = draw _board
