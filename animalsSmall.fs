@@ -96,7 +96,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   /// <remarks>works only with integers</remarks>
   /// <returns>Some(x) or None</returns>
   let corner x =
-    if (x<0) || (x>9) then None
+    if (x<0) || (x>_board.width-1) then None
     else Some(x)
 
   /// <summary>mooseNext checks if a moose is near the wolf</summary>
@@ -145,7 +145,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   member this.size = boardWidth*boardWidth
   member this.count = _board.moose.Length + _board.wolves.Length
   member this.board = _board
-
   /// <summary>this.tick() handles the two groups of animals.
   /// Each update, the animals either move, breed or feed (wolf only)</summary>
   /// <remarks>Works only with the animals wolf and moose</remarks>
@@ -154,12 +153,12 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
     let mutable animalCount = 0
     /// Handling the moose population
     do for m in _board.moose do
-        if (animalCount < 100) then
+        if (animalCount < this.size) then
           animalCount <- animalCount + 1
           let tick = m.tick()
           let curPos = Some(move _board m.position.Value)
           // Making them children
-          if (tick.IsSome && animalCount < 100 && not(curPos = m.position)) then
+          if (tick.IsSome && animalCount < this.size && not(curPos = m.position)) then
             let _m = tick.Value
             animalCount <- animalCount + 1
             _m.position <- Some(move _board m.position.Value)
@@ -171,7 +170,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
 
     /// Handling the wolves population
     do for w in _board.wolves do
-        if (animalCount < 100) then
+        if (animalCount < this.size) then
           animalCount <- animalCount + 1
           let tick = w.tick()
           // Eating or breading, if not dead...
@@ -184,7 +183,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
               w.position <- target
               w.resetHunger()
             //Birth if it is allowed
-            elif (tick.IsSome  && animalCount < 100 && not(curPos = w.position)) then
+            elif (tick.IsSome  && animalCount < this.size && not(curPos = w.position)) then
               animalCount <- animalCount + 1
               let _w = tick.Value
               _w.position <- Some(move _board w.position.Value)

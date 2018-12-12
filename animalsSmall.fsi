@@ -36,7 +36,7 @@ type moose =
     /// Perform a tick for this moose, i.e., call updateReproduction.
     member tick : unit -> moose option
   end
-/// A wolf is an animal with hunger and methods for updating its age and hunger and for reproducing offspring. 
+/// A wolf is an animal with hunger and methods for updating its age and hunger and for reproducing offspring.
 /// If the wolf has not eaten in a specified number of ticks, then it is taken off the board.
 type wolf =
   class
@@ -84,8 +84,8 @@ type environment =
     member count : int
     /// The positions on the board.
     member size : int
-    /// Perform a tick by performing all animal's ticks in random order. Animals perform the following actions: 
-    /// Calves and cubs are added if there is room in a neighbouring position. 
+    /// Perform a tick by performing all animal's ticks in random order. Animals perform the following actions:
+    /// Calves and cubs are added if there is room in a neighbouring position.
     /// Wolves eat a random Moose in a neighbouring position. If animals do not give birth, eat or are eaten, then they move to an available neighbouring position.
     member tick : unit -> unit
   end
