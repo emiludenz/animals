@@ -100,7 +100,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   /// <summary>mooseNext checks if a moose is near the wolf</summary>
   /// <param name="b">The board with the moose list and wolf list</param>
   /// <param name="pos">A start postion</param>
-  /// <remarks>works only with the type specified</remarks>
+  /// <remarks>works only with the types specified</remarks>
   /// <returns>A position</returns>
   let mooseNext (b: board) (pos:position) =
     let arr = draw b
@@ -158,7 +158,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
           if (tick.IsSome && animalCount < this.size && not(curPos = m.position)) then
             let _m = tick.Value
             animalCount <- animalCount + 1
-            _m.position <- Some(move _board m.position.Value)
+            _m.position <- curPos
             _board.moose <- List.append _board.moose [_m]
           // Or just move around
           else m.position <- Some(move _board m.position.Value)
@@ -183,7 +183,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
             elif (tick.IsSome  && animalCount < this.size && not(curPos = w.position)) then
               animalCount <- animalCount + 1
               let _w = tick.Value
-              _w.position <- Some(move _board w.position.Value)
+              _w.position <- curPos
               _board.wolves <- List.append _board.wolves [_w]
             // Or just move around
             else w.position <- Some(move _board w.position.Value)
