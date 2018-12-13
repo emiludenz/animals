@@ -14,7 +14,6 @@ type animal (symb : symbol, repLen : int) =
   let mutable _reproduction = rnd.Next(1,repLen)
   let mutable _pos : position option = None
   let _symbol : symbol = symb
-
   member this.symbol = _symbol
   member this.position
     with get () = _pos
@@ -30,7 +29,6 @@ type animal (symb : symbol, repLen : int) =
 /// A moose is an animal
 type moose (repLen : int) =
   inherit animal (mSymbol, repLen)
-
   member this.tick () : moose option =
     this.updateReproduction()
     if (this.reproduction = 1) then
@@ -42,7 +40,6 @@ type moose (repLen : int) =
 type wolf (repLen : int, hungLen : int) =
   inherit animal (wSymbol, repLen)
   let mutable _hunger = hungLen
-
   member this.hunger = _hunger
   member this.updateHunger () =
     _hunger <- _hunger - 1
@@ -135,7 +132,6 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
             targets <- List.append targets [x.Value,y.Value]
     if (targets.Length > 0) then
       targets.[rnd.Next (0, targets.Length)] else pos
-
 
   // populate the board with animals placed at random.
   do for m in _board.moose do
