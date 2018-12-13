@@ -25,10 +25,10 @@ let main args =
         let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), Convert.ToBoolean(v))
         for i in 0..int32(T) do
             str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
-            isle.tick ()
             if (Convert.ToBoolean(v)) then
                 printfn "In the year %d" i
                 printfn "%A" isle
+            isle.tick ()
         File.WriteAllText("test.txt", str)
     // With 7 arguments
     | [|T; n; e; felg; u; fulv; s|] ->
