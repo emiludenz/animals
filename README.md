@@ -6,7 +6,7 @@ To use this CLT you should have mono installed.
 
 To compile the program, run either ./make.sh or the following command
 
-:$ fsharpc -a animalsSmall.fs && fsharpc -r animalsSmall.dll main.fsx
+:$ fsharpc -a animalsSmall.fs && fsharpc -r animalsSmall.dll main.fsx --out:animalExperiment.exe
 
 
 To use the program the following parameters should be provided to create a new environment, where a text file, called "test.txt", is returned when the program terminates.
