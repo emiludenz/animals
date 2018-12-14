@@ -56,17 +56,17 @@ let main args =
     The CLT AnimalExperiment conducts evils tests on animals, running 
     a matrix lifelike simulation on unknowning and unsuspecting animals!!
 
-    mono 
+    mono animalExperiment.exe [T] [] [] [] [] [] [] []
 
-    [T] T is an int, representing how many ticks to run
-    [n] n is the number represention the board witdh
-    [e] e represents the amount of moose to start off with
-    [fegl] fegl is the time to breed a new moose
-    [u] u represents the amount of wolves to start off with
-    [fulv] fulv is the time to breed a new wolf
-    [s] s represents hunger for the wolves before starvation
-    [v] v is a bool, verbose true or false. Default is false
-    [out] out is a string for the output, default is test.txt
+    [T]     T is an int, representing how many ticks to run
+    [n]     n is the number represention the board witdh
+    [e]     e represents the amount of moose to start off with
+    [fegl]  fegl is the time to breed a new moose
+    [u]     u represents the amount of wolves to start off with
+    [fulv]  fulv is the time to breed a new wolf
+    [s]     s represents hunger for the wolves before starvation
+    [v]     v is a bool, verbose true or false. Default is false
+    [out]   out is a string for the output, default is test.txt
     
     
     Eg: mono main.exe 50 10 10 10 10 10 false filename.txt"""
