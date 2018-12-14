@@ -67,8 +67,8 @@ let main args =
     [s]     s represents hunger for the wolves before starvation
     [v]     v is a bool, verbose true or false. Default is false
     [out]   out is a string for the output, default is test.txt
-    Hey
     
+   
     Eg: mono main.exe 50 10 10 10 10 10 false filename.txt"""
     /// Exit code
     0
