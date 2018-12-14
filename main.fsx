@@ -56,7 +56,7 @@ let main args =
     The CLT AnimalExperiment conducts evils tests on animals, running 
     a matrix lifelike simulation on unknowning and unsuspecting animals!!
 
-    mono animalExperiment.exe [T] [] [] [] [] [] [] []
+    mono animalExperiment.exe [T] [n] [e] [felg] [u] [fulv] [s] [v[OPTIONAL]] [out[OPTIONAL]]
 
     [T]     T is an int, representing how many ticks to run
     [n]     n is the number represention the board witdh
