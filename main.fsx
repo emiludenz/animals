@@ -31,7 +31,7 @@ let main args =
                 printfn "%A" isle
             isle.tick ()
         File.WriteAllText(string(out), str)
-    
+
     // With 8 arguments
     | [|T; n; e; felg; u; fulv; s; v|] ->
         let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), Convert.ToBoolean(v))
@@ -42,7 +42,7 @@ let main args =
                 printfn "%A" isle
             isle.tick ()
         File.WriteAllText("test.txt", str)
-    
+
     // With 7 arguments
     | [|T; n; e; felg; u; fulv; s|] ->
         let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), false)
@@ -50,10 +50,10 @@ let main args =
             str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
             isle.tick ()
         File.WriteAllText("test.txt", str)
-    
+
     // Anything else
     | _ -> printfn """
-    The CLT AnimalExperiment conducts evils tests on animals, running 
+    The CLT AnimalExperiment conducts evils tests on animals, running
     a matrix lifelike simulation on unknowning and unsuspecting animals!!
 
     mono animalExperiment.exe [T] [n] [e] [felg] [u] [fulv] [s] [v[OPTIONAL]] [out[OPTIONAL]]
@@ -67,7 +67,7 @@ let main args =
     [s]     s represents hunger for the wolves before starvation
     [v]     v is a bool, verbose true or false. Default is false
     [out]   out is a string for the output, default is test.txt
-    
+
     Eg: mono main.exe 50 10 10 10 10 10 false filename.txt"""
     /// Exit code
     0
