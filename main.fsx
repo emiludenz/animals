@@ -13,7 +13,7 @@ open System.IO
 /// <param name="fulv"> fulv is the time to breed a new wolf</param>
 /// <param name="s"> s represents hunger for the wolves before starvation</param>
 /// <param name="v"> v is a bool, verbose true or false. Default is false</param>
-/// <param name="out"> out is a bool, verbose true or false. Default is false</param>
+/// <param name="out"> out is a string for the output, default is test.txt</param>
 /// <remarks> Would have been smart if the first argument or
 /// something was a name of a text file to write to </remarks>
 /// <returns> A text file called test.txt with results </returns>
@@ -42,6 +42,7 @@ let main args =
                 printfn "%A" isle
             isle.tick ()
         File.WriteAllText("test.txt", str)
+    
     // With 7 arguments
     | [|T; n; e; felg; u; fulv; s|] ->
         let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), false)
@@ -49,26 +50,25 @@ let main args =
             str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
             isle.tick ()
         File.WriteAllText("test.txt", str)
+    
     // Anything else
     | _ -> printfn """
-            <summary> The CLT AnimalExperiment conducts evils tests on animals,
-            running a matrix lifelike simulation on unknowning and unsuspecting
-            animals!!</summary>
+    The CLT AnimalExperiment conducts evils tests on animals, running 
+    a matrix lifelike simulation on unknowning and unsuspecting animals!!
 
-            <param name="T"> T is an int, representing how many ticks to run</param>
-            <param name="n"> n is the number represention the board witdh</param>
-            <param name="e"> e represents the amount of moose to start off with</param>
-            <param name="fegl"> fegl is the time to breed a new moose</param>
-            <param name="u"> u represents the amount of wolves to start off with</param>
-            <param name="fulv"> fulv is the time to breed a new wolf</param>
-            <param name="s"> s represents hunger for the wolves before starvation</param>
-            <param name="v"> v is a bool, verbose true or false. Default is false</param>
+    mono 
 
-            <remarks> Would have been smart if the first argument or
-            something was a name/path of a text file to write to </remarks>
-
-            <code> mono main.exe 50 10 10 10 10 10 false </code>
-
-            <returns> A text file called test.txt with results</returns>"""
+    [T] T is an int, representing how many ticks to run
+    [n] n is the number represention the board witdh
+    [e] e represents the amount of moose to start off with
+    [fegl] fegl is the time to breed a new moose
+    [u] u represents the amount of wolves to start off with
+    [fulv] fulv is the time to breed a new wolf
+    [s] s represents hunger for the wolves before starvation
+    [v] v is a bool, verbose true or false. Default is false
+    [out] out is a string for the output, default is test.txt
+    
+    
+    Eg: mono main.exe 50 10 10 10 10 10 false filename.txt"""
     /// Exit code
     0
