@@ -144,8 +144,8 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
   member this.board = _board
   /// <summary> The method tick() handles the two groups of animals.
   /// Each update, the animals either move, breed or feed (wolf only)</summary>
-  /// <remarks>Works only with the animals wolf and moose</remarks>
-  /// <returns>Nothing, it changes the object that has been initialised</returns>
+  /// <remarks>Only works with the animals wolf and moose</remarks>
+  /// <returns>Nothing, it changes the object that has been initialised by main</returns>
   member this.tick() =
     let mutable animalCount = 0
     /// Handling the moose population
@@ -170,7 +170,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
         if (animalCount < this.size) then
           animalCount <- animalCount + 1
           let tick = w.tick()
-          // Eating or breading, if not dead...
+          // Eating or breeding, if not dead...
           if (w.position.IsSome) then
             let target = mooseNext _board w.position.Value
             let curPos = Some(move _board w.position.Value)
