@@ -12,7 +12,7 @@ open System.IO
 /// <param name="u"> u represents the amount of wolves to start off with</param>
 /// <param name="fulv"> fulv is the time to breed a new wolf</param>
 /// <param name="s"> s represents hunger for the wolves before starvation</param>
-/// <param name="v"> v is a bool, verbose true or false. Default is false</param>
+/// <param name="v"> v is a bool, verbose true or false. Default is false.</param>
 /// <param name="out"> out is a string for the output, default is test.txt</param>
 /// <remarks> Would have been smart if the first argument or
 /// something was a name of a text file to write to </remarks>
