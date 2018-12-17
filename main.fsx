@@ -8,7 +8,7 @@ open System.IO
 /// <param name="T"> T is an int, representing how many ticks to run</param>
 /// <param name="n"> n is the number represention the board witdh</param>
 /// <param name="e"> e represents the amount of moose to start off with</param>
-/// <param name="fegl"> fegl is the time to breed a new moose</param>
+/// <param name="felg"> felg is the time to breed a new moose</param>
 /// <param name="u"> u represents the amount of wolves to start off with</param>
 /// <param name="fulv"> fulv is the time to breed a new wolf</param>
 /// <param name="s"> s represents hunger for the wolves before starvation</param>
@@ -61,13 +61,13 @@ let main args =
     [T]     T is an int, representing how many ticks to run
     [n]     n is the number represention the board witdh
     [e]     e represents the amount of moose to start off with
-    [fegl]  fegl is the time to breed a new moose
+    [felg]  felg is the time to breed a new moose
     [u]     u represents the amount of wolves to start off with
     [fulv]  fulv is the time to breed a new wolf
     [s]     s represents hunger for the wolves before starvation
     [v]     v is a bool, verbose true or false. Default is false
     [out]   out is a string for the output, default is test.txt
 
-    Eg: mono main.exe 50 10 10 10 10 10 false filename.txt"""
+    Eg: mono main.exe 50 10 10 10 10 10 10 false filename.txt"""
     /// Exit code
     0
