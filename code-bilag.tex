@@ -26,9 +26,16 @@ mutable, if, then, else, cloud, async, static, use, abstract, interface, inherit
   literate={`}{\`}1,
   stringstyle=\color{redstrings},
 }
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 
+}
 
-\begin{lstlisting}
+\begin{lstlisting}[language=FSharp]
     module animals
 
 type symbol = char
@@ -201,7 +208,7 @@ type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : 
     ret
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[language=FSharp]
     open animals
     open System
     open System.IO
