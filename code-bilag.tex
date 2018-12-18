@@ -1,0 +1,261 @@
+\usepackage{listings}
+\usepackage{upquote}
+\usepackage{color}
+
+\definecolor{bluekeywords}{rgb}{0.13,0.13,1}
+\definecolor{greencomments}{rgb}{0,0.5,0}
+\definecolor{redstrings}{rgb}{0.9,0,0}
+
+\lstdefinelanguage{FSharp}%
+{morekeywords={let, new, match, with, rec, open, module, namespace, type, of, member, % 
+and, for, while, true, false, in, do, begin, end, fun, function, return, yield, try, %
+mutable, if, then, else, cloud, async, static, use, abstract, interface, inherit, finally },
+  otherkeywords={ let!, return!, do!, yield!, use!, var, from, select, where, order, by },
+  keywordstyle=\color{bluekeywords},
+  sensitive=true,
+  basicstyle=\ttfamily,
+	breaklines=true,
+  xleftmargin=\parindent,
+  aboveskip=\bigskipamount,
+	tabsize=4,
+  morecomment=[l][\color{greencomments}]{///},
+  morecomment=[l][\color{greencomments}]{//},
+  morecomment=[s][\color{greencomments}]{{(*}{*)}},
+  morestring=[b]",
+  showstringspaces=false,
+  literate={`}{\`}1,
+  stringstyle=\color{redstrings},
+}
+
+
+\begin{lstlisting}
+    module animals
+
+type symbol = char
+type position = int * int
+type neighbour = position * symbol
+
+let mSymbol : symbol = 'm'
+let wSymbol : symbol = 'w'
+let eSymbol : symbol = ' '
+let rnd = System.Random ()
+
+type animal (symb : symbol, repLen : int) =
+  let mutable _reproduction = rnd.Next(1,repLen)
+  let mutable _pos : position option = None
+  let _symbol : symbol = symb
+  member this.symbol = _symbol
+  member this.position
+    with get () = _pos
+    and set aPos = _pos <- aPos
+  member this.reproduction = _reproduction
+  member this.updateReproduction () =
+    _reproduction <- _reproduction - 1
+  member this.resetReproduction () =
+    _reproduction <- repLen
+  override this.ToString () =
+    string this.symbol
+
+    type moose (repLen : int) =
+  inherit animal (mSymbol, repLen)
+  member this.tick () : moose option =
+    this.updateReproduction()
+    if (this.reproduction = 1) then
+      this.resetReproduction()
+      Some(moose(this.reproduction))
+    else None
+
+type wolf (repLen : int, hungLen : int) =
+  inherit animal (wSymbol, repLen)
+  let mutable _hunger = hungLen
+  member this.hunger = _hunger
+  member this.updateHunger () =
+    _hunger <- _hunger - 1
+    if _hunger <= 0 then
+      this.position <- None
+  member this.resetHunger () =
+    _hunger <- hungLen
+  member this.tick () : wolf option =
+    this.updateHunger()
+    this.updateReproduction()
+    if (this.reproduction = 1) then
+      this.resetReproduction()
+      Some(wolf(this.reproduction, hungLen))
+    else None
+
+type board =
+  {width : int;
+   mutable moose : moose list;
+   mutable wolves : wolf list;}
+
+type environment (boardWidth : int, NMooses : int, mooseRepLen : int, NWolves : int, wolvesRepLen : int, wolvesHungLen : int, verbose : bool) =
+  let _board : board = {
+    width = boardWidth;
+    moose = List.init NMooses (fun i -> moose(mooseRepLen));
+    wolves = List.init NWolves (fun i -> wolf(wolvesRepLen, wolvesHungLen));
+  }
+
+  let draw (b : board) : char [,] =
+    let arr = Array2D.create<char> boardWidth boardWidth eSymbol
+    for m in b.moose do
+      Option.iter (fun p -> arr.[fst p, snd p] <- mSymbol) m.position
+    for w in b.wolves do
+      Option.iter (fun p -> arr.[fst p, snd p] <- wSymbol) w.position
+    arr
+
+  let anyEmptyField (b : board) : position =
+    let arr = draw b
+    let mutable i = rnd.Next b.width
+    let mutable j = rnd.Next b.width
+    while arr.[i,j] <> eSymbol do
+      i <- rnd.Next b.width
+      j <- rnd.Next b.width
+    (i,j)
+
+  let corner x =
+    if (x < 0) || (x > _board.width-1) then None
+    else Some(x)
+    
+  let mooseNext (b: board) (pos:position) =
+    let arr = draw b
+    let mutable targets = []
+    for i = -1 to 1 do
+      for j = -1 to 1 do
+        let x = corner (j+fst(pos))
+        let y = corner (i+snd(pos))
+        if (x.IsSome && y.IsSome) then
+          if (arr.[x.Value,y.Value] = mSymbol) then
+            targets <- List.append targets [Some(x.Value,y.Value)]
+    if (targets.Length > 0) then
+      targets.[rnd.Next (0, targets.Length)] else None
+
+  let move (b: board) (pos:position) =
+    let arr = draw b
+    let mutable targets = []
+    for i = -1 to 1 do
+      for j = -1 to 1 do
+        let x = corner (j+fst(pos))
+        let y = corner (i+snd(pos))
+        if (x.IsSome && y.IsSome) then
+          if (arr.[x.Value,y.Value] = eSymbol) then
+            targets <- List.append targets [x.Value,y.Value]
+    if (targets.Length > 0) then
+      targets.[rnd.Next (0, targets.Length)] else pos
+
+  do for m in _board.moose do
+       m.position <- Some (anyEmptyField _board)
+  do for w in _board.wolves do
+       w.position <- Some (anyEmptyField _board)
+
+  member this.size = boardWidth*boardWidth
+  member this.count = _board.moose.Length + _board.wolves.Length
+  member this.board = _board
+  member this.tick() =
+    let mutable animalCount = 0
+    do for m in _board.moose do
+        if (animalCount < this.size) then
+          animalCount <- animalCount + 1
+          let tick = m.tick()
+          let curPos = Some(move _board m.position.Value)
+          if (tick.IsSome && animalCount < this.size && not(curPos = m.position)) then
+            let _m = tick.Value
+            animalCount <- animalCount + 1
+            _m.position <- curPos
+            _board.moose <- List.append _board.moose [_m]
+          else m.position <- Some(move _board m.position.Value)
+        else m.position <- None
+    _board.moose <- _board.moose |> List.filter (fun i -> not(i.position = None))
+
+    do for w in _board.wolves do
+        if (animalCount < this.size) then
+          animalCount <- animalCount + 1
+          let tick = w.tick()
+          if (w.position.IsSome) then
+            let target = mooseNext _board w.position.Value
+            let curPos = Some(move _board w.position.Value)
+            if (target.IsSome) then
+              _board.moose <- _board.moose |> List.filter (fun i -> not(i.position = target))
+              w.position <- target
+              w.resetHunger()
+            elif (tick.IsSome  && animalCount < this.size && not(curPos = w.position)) then
+              animalCount <- animalCount + 1
+              let _w = tick.Value
+              _w.position <- curPos
+              _board.wolves <- List.append _board.wolves [_w]
+            else w.position <- Some(move _board w.position.Value)
+        else w.position <- None
+    _board.wolves <- _board.wolves |> List.filter (fun i -> not(i.position = None))
+
+  override this.ToString () =
+    let arr = draw _board
+    let mutable ret = "  "
+    ret <- sprintf "Wolves: %d | Moose: %d\n  " _board.wolves.Length _board.moose.Length
+    for j = 0 to _board.width-1 do
+      ret <- ret + string (j % 10) + " "
+    ret <- ret + "\n"
+    for i = 0 to _board.width-1 do
+      ret <- ret + string (i % 10) + " "
+      for j = 0 to _board.width-1 do
+        ret <- ret + string arr.[i,j] + " "
+      ret <- ret + "\n"
+    ret
+\end{lstlisting}
+
+\begin{lstlisting}
+    open animals
+    open System
+    open System.IO
+    [<EntryPoint>]
+    let main args =
+        let mutable str = "Wolf,  Moose\n"
+        match args with
+        | [|T; n; e; felg; u; fulv; s; v;out|] ->
+            let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), Convert.ToBoolean(v))
+            for i in 0..int32(T) do
+                str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
+                if (Convert.ToBoolean(v)) then
+                    printfn "In the year %d" i
+                    printfn "%A" isle
+                isle.tick ()
+            File.WriteAllText(string(out), str)
+        
+        | [|T; n; e; felg; u; fulv; s; v|] ->
+            let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), Convert.ToBoolean(v))
+            for i in 0..int32(T) do
+                str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
+                if (Convert.ToBoolean(v)) then
+                    printfn "In the year %d" i
+                    printfn "%A" isle
+                isle.tick ()
+            File.WriteAllText("test.txt", str)
+        
+        | [|T; n; e; felg; u; fulv; s|] ->
+            let isle = animals.environment(int32(n), int32(e), int32(felg), int32(u), int32(fulv), int32(s), false)
+            for i in 0..int32(T) do
+                str <- str + sprintf "%3s, %3s\n" (string(isle.board.wolves.Length)) (string(isle.board.moose.Length))
+                isle.tick ()
+            File.WriteAllText("test.txt", str)
+        
+        | _ -> printfn """
+        The CLT AnimalExperiment conducts evils tests on animals, running
+        a matrix lifelike simulation on unknowning and unsuspecting animals!!
+    
+        mono animalExperiment.exe [T] [n] [e] [felg] [u] [fulv] [s] [v[OPTIONAL]] [out[OPTIONAL]]
+    
+        [T]     T is an int, representing how many ticks to run
+        [n]     n is the number represention the board witdh
+        [e]     e represents the amount of moose to start off with
+        [felg]  felg is the time to breed a new moose
+        [u]     u represents the amount of wolves to start off with
+        [fulv]  fulv is the time to breed a new wolf
+        [s]     s represents hunger for the wolves before starvation
+        [v]     v is a bool, verbose true or false. Default is false
+        [out]   out is a string for the output, default is test.txt
+    
+        Eg: mono main.exe 50 10 10 10 10 10 10 false filename.txt"""
+        
+        ///Exit Code
+        0
+
+
+\end{lstlisting}
